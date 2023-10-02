@@ -1,0 +1,59 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+<head>
+    <title>Test Data</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+</head>
+
+
+<body>
+    <button onclick="console.log(sendTestData())">Create Player</button>
+</body>
+
+
+<script>
+
+    function sendTestData() {
+        return fetch('http://172.18.143.98:8000/', {
+        method: 'POST',
+        headers: {
+            'Accept': 'text/html',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin' : "*"
+        },
+        body: JSON.stringify({
+            "player_name": generatePlayerId(),
+            "app_name": generateAppId(),
+            "consent": generateConsent(),
+            "play_data": generatePlayData()
+        }),
+    })
+
+    // .then(response => response.json())
+    // .then(response => console.log(JSON.stringify(response)))
+    }
+
+
+    function generateConsent() {
+        return true
+    }
+
+    function generatePlayerId() {
+        return "id"
+    }
+
+    function generateAppId() {
+        return "app-id"
+    }
+
+    function generatePlayData() {
+        return JSON.stringify ({"a": "e"})
+    }
+</script>
+</html>
