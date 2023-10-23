@@ -11,6 +11,8 @@ config = do
     -- for what you can do here
     -- option Development
     -- option (AppHostname "localhost")
+    option Development
+    option (AppHostname "localhost")
 
     option Cors.simpleCorsResourcePolicy
     -- pure ()
