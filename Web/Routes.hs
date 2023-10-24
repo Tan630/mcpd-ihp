@@ -10,3 +10,6 @@ instance AutoRoute PlayersController
 
 instance AutoRoute AppsController
 
+
+instance AutoRoute PlayResultsController
+

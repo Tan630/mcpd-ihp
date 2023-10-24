@@ -28,3 +28,13 @@ data AppsController
     | UpdateAppAction { appId :: !(Id App) }
     | DeleteAppAction { appId :: !(Id App) }
     deriving (Eq, Show, Data)
+
+data PlayResultsController
+    = PlayResultsAction
+    | NewPlayResultAction
+    | ShowPlayResultAction { playResultId :: !(Id PlayResult) }
+    | CreatePlayResultAction
+    | EditPlayResultAction { playResultId :: !(Id PlayResult) }
+    | UpdatePlayResultAction { playResultId :: !(Id PlayResult) }
+    | DeletePlayResultAction { playResultId :: !(Id PlayResult) }
+    deriving (Eq, Show, Data)
