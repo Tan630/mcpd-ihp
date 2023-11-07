@@ -1,0 +1,139 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- <iframe src="https://172.23.84.51:8000/NewSession" title="New Session"></iframe>  -->
+
+<!-- <form method="POST" action="http://172.18.143.98:8000/CreatePlayer" id="" class="new-form" data-disable-javascript-submission="false"><div class="mb-3" id="form-group-player_name"><label class="form-label" for="player_name">Name</label><input type="text" name="name" placeholder="" id="player_name" class="form-control"> </div> <button class="btn btn-primary" type="submit">Create Player</button></form> -->
+
+<body>
+    <div>
+        <!-- Input the server's address in the address field. Once the server is deployed,
+                it should be possible to hard-code this component (or let it be served dynamically).
+                As it stands, this is the only solution I can think of.   -->
+        <input id="inp-target-addr" placeholder="http://xxx.xxx.xxx.xxx:xxxx"/>
+    </div>
+    <br/>
+    <button id="btn-send-player-form"> Create Player </button>
+    <button id="btn-send-app-form"> Create App </button>
+    <button id="btn-send-play-data-form"> Create Play Data </button>
+    <button id="btn-open-login-window"> Log In </button>
+</body>
+
+
+<script>
+    function take_random_element (list) {
+        return list[Math.floor((Math.random()*list.length))];
+    }
+
+    const btnSendPlayerForm = document.getElementById("btn-send-player-form");
+    const btnSendAppForm    = document.getElementById("btn-send-app-form");
+    const btnSendPlayDataForm = document.getElementById("btn-send-play-data-form");
+    const iptTargetAddr = document.getElementById("inp-target-addr");
+
+    const btnOpenLoginWindow = document.getElementById("btn-open-login-window");
+
+    function getRootAddr(){return iptTargetAddr.value;} /* Find the address of IHP  root server. e.g. "http://172.23.84.51:8000" */
+
+    let player_id_list = [];
+    let app_id_list = [];
+    
+    function sendData(data, address) {
+        /* Send form data to the server. Sending data via FormData does not seem to trigger pre-flight requests. */
+        
+        const XHR = new XMLHttpRequest();
+        const FD = new FormData();
+        for (const [name, value] of Object.entries(data)) {
+            FD.append(name, value);
+        }
+
+        /* Register listeners that report on the asynchronous request. */
+        XHR.addEventListener("load", (event) => {
+            console.log("Load successful");
+        });
+        
+        XHR.addEventListener("error", (event) => {
+            console.log("Load failed");
+        });
+        
+        /* Open a POST socket, then send through that socket. */
+        XHR.open("POST", address);
+        
+        XHR.send(FD);
+    }
+    
+    btnSendPlayerForm.addEventListener("click", () => {
+        /* Send a form to create a new player. */
+        sendData({ name: generatePlayerName() }, getRootAddr()+"/CreatePlayer");
+    });
+
+    btnOpenLoginWindow.addEventListener("click", () => {
+        if (getRootAddr() != "") {
+            window.open(getRootAddr()+"/NewSession", "Log In")
+        }
+        
+    });
+    
+    btnSendAppForm.addEventListener("click", () => {
+        /* Send a form to create a new app. */
+        sendData({ name: generateAppName() }, getRootAddr()+"/CreateApp");
+    });
+
+    btnSendPlayDataForm.addEventListener("click", () => {
+        /* Send a form to create a new server. Note that generatePlayerData does not remember past players. */
+        sendData({ playerName: drawPlayerName(),
+            appName: drawAppName(),
+            consent: generateConsent(),
+            playData: generatePlayData() }, getRootAddr()+"/CreatePlayResult");
+    });
+    
+    function generateConsent() {
+        /* Generate a value for the consent field */
+        return Math.random() < 0.5;
+    }
+    
+    function generatePlayerName() {
+        /* Generate the name of a player */
+        new_player_id = "player" + Math.random();
+        player_id_list.push(new_player_id);
+        
+        return new_player_id;
+    }
+    
+    function generateAppName() {
+        /* Generate the name of am app */
+        new_app_id = "app-id" + Math.random();
+        app_id_list.push(new_app_id);
+        return new_app_id;
+    };
+    
+    function generatePlayData() {
+        /* Simulate data that is sent after the end of a gaming "session". */
+        return JSON.stringify ({"score": Math.floor(Math.random()*100)});
+    };
+
+    function drawPlayerName() {
+        /* Draw a player name from existing players. */
+        return_elem = take_random_element(player_id_list);
+        if (return_elem == null) {
+            return_elem = generatePlayerName(0);
+        }
+        return return_elem;
+    }
+
+    function drawAppName() {
+        /* Draw an app name from existing players. */
+        return_elem = take_random_element(app_id_list);
+        if (return_elem == null) {
+            return_elem = generateAppName(0);
+        }
+        return return_elem;
+    }
+
+</script>
+</html>
+
+
+
+
+

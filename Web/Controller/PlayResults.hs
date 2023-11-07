@@ -35,6 +35,7 @@ instance Controller PlayResultsController where
                     redirectTo EditPlayResultAction { .. }
 
     action CreatePlayResultAction = do
+        ensureIsUser
         let playResult = newRecord @PlayResult
         playResult
             |> buildPlayResult

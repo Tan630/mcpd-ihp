@@ -35,6 +35,7 @@ instance Controller PlayersController where
                     redirectTo EditPlayerAction { .. }
 
     action CreatePlayerAction = do
+        ensureIsUser
         let player = newRecord @Player
         player
             |> buildPlayer

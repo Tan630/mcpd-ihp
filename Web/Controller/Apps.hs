@@ -35,6 +35,7 @@ instance Controller AppsController where
                     redirectTo EditAppAction { .. }
 
     action CreateAppAction = do
+        ensureIsUser
         let app = newRecord @App
         app
             |> buildApp

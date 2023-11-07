@@ -3,6 +3,7 @@ module Web.Types where
 import IHP.Prelude
 import IHP.ModelSupport
 import Generated.Types
+import IHP.LoginSupport.Types
 
 data WebApplication = WebApplication deriving (Eq, Show)
 
@@ -37,4 +38,18 @@ data PlayResultsController
     | EditPlayResultAction { playResultId :: !(Id PlayResult) }
     | UpdatePlayResultAction { playResultId :: !(Id PlayResult) }
     | DeletePlayResultAction { playResultId :: !(Id PlayResult) }
+    deriving (Eq, Show, Data)
+
+
+
+-- ADD THIS TO THE END OF THE FILE
+
+instance HasNewSessionUrl User where
+    newSessionUrl _ = "/NewSession"
+
+type instance CurrentUserRecord = User
+data SessionsController
+    = NewSessionAction
+    | CreateSessionAction
+    | DeleteSessionAction
     deriving (Eq, Show, Data)

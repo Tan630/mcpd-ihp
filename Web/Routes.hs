@@ -13,3 +13,4 @@ instance AutoRoute AppsController
 
 instance AutoRoute PlayResultsController
 
+instance AutoRoute SessionsController

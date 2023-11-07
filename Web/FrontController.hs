@@ -10,9 +10,13 @@ import Web.Controller.Apps
 import Web.Controller.Players
 import Web.Controller.Static
 
+import IHP.LoginSupport.Middleware
+import Web.Controller.Sessions
+
 instance FrontController WebApplication where
     controllers = 
         [ startPage WelcomeAction
+        , parseRoute @SessionsController 
         -- Generator Marker
         , parseRoute @PlayResultsController
         , parseRoute @AppsController
@@ -23,3 +27,4 @@ instance InitControllerContext WebApplication where
     initContext = do
         setLayout defaultLayout
         initAutoRefresh
+        initAuthentication @User
